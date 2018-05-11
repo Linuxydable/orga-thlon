@@ -1,0 +1,78 @@
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'maven'
+
+group = 'fr.linuxydable'
+version = '1.0-SNAPSHOT'
+archivesBaseName = 'Orgathlon'
+
+sourceSets.main.java.srcDirs = ['src/main/java']
+sourceSets.main.resources.srcDirs = ['src/main/ressources']
+
+sourceSets.test.java.srcDirs = ['src/test/java']
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+compileJava.options.encoding = 'UTF-8'
+
+configurations {
+    provided
+    compile.extendsFrom provided
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompileOnly(
+            'junit:junit:4.12'
+    )
+    testImplementation(
+            'org.junit.jupiter:junit-jupiter-api:5.2.0'
+    )
+    testRuntimeOnly(
+            'org.junit.jupiter:junit-jupiter-engine:5.2.0',
+            'org.junit.vintage:junit-vintage-engine:5.2.0'
+    )
+
+    compile 'mysql:mysql-connector-java:5.1.46'
+    compile 'com.jgoodies:jgoodies-forms:1.8.0'
+    compile 'com.miglayout:miglayout-swing:5.0'
+}
+
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'Orgathlon',
+                   'Implementation-Version': version,
+                   'Main-Class': 'fr.linuxydable.orgathlon.modele.Main'
+    }
+    dependsOn configurations.runtime
+    from{
+        (configurations.runtime - configurations.provided).collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+}
+
+task run(type: JavaExec, dependsOn: 'classes') {
+    main = 'fr.linuxydable.orgathlon.modele.Main'
+    classpath = sourceSets.main.runtimeClasspath
+}
+
+task AppliTest(type: JavaExec, dependsOn: 'classes') {
+    main = 'fr.linuxydable.orgathlon.vue.AppliTest'
+    classpath = sourceSets.main.runtimeClasspath
+}
+
+task MainGUIAccueil(type: JavaExec, dependsOn: 'classes') {
+    main = 'fr.linuxydable.orgathlon.rocher.MainGUIAccueil'
+    classpath = sourceSets.main.runtimeClasspath
+}
+
+task VueAccueil2(type: JavaExec, dependsOn: 'classes') {
+    main = 'fr.linuxydable.orgathlon.rocher.VueAccueil2'
+    classpath = sourceSets.main.runtimeClasspath
+}
+

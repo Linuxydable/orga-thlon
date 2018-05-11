@@ -1,0 +1,12 @@
+# gradle build
+/.gradle/
+/build/
+
+# eclipse generated files
+/.settings/
+/.classpath
+/.project
+
+# intellij generated files
+/orga-thlon.iml
+/.idea/
